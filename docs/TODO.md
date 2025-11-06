@@ -130,11 +130,11 @@
 
 ### 3.4 공유 기능 (MVP 2.4.5)
 
-- [ ] `components/tour-detail/share-button.tsx` - 공유 버튼 컴포넌트
-- [ ] URL 복사 기능 (클립보드 API)
-- [ ] 복사 완료 토스트 메시지
-- [ ] Open Graph 메타태그 동적 생성
-- [ ] 페이지 확인 및 공유 테스트
+- [x] `components/tour-detail/share-button.tsx` - 공유 버튼 컴포넌트
+- [x] URL 복사 기능 (클립보드 API)
+- [x] 복사 완료 토스트 메시지
+- [x] Open Graph 메타태그 동적 생성
+- [x] 페이지 확인 및 공유 테스트
 
 ### 3.5 추가 정보 섹션 (향후 구현)
 

@@ -24,15 +24,93 @@
 
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { headers } from "next/headers";
 import { Button } from "@/components/ui/button";
 import { getDetailCommon, getDetailIntro } from "@/lib/api/tour-api";
 import { DetailInfo } from "@/components/tour-detail/detail-info";
+import { ShareButton } from "@/components/tour-detail/share-button";
 import { ErrorMessage } from "@/components/ui/error-message";
+import type { Metadata } from "next";
 
 interface PlaceDetailPageProps {
   params: Promise<{
     contentId: string;
   }>;
+}
+
+/**
+ * Open Graph 메타태그 동적 생성
+ * PRD 2.4.5 공유 기능 요구사항
+ */
+export async function generateMetadata({
+  params,
+}: PlaceDetailPageProps): Promise<Metadata> {
+  const { contentId } = await params;
+
+  try {
+    const detail = await getDetailCommon(contentId);
+
+    if (!detail) {
+      return {
+        title: "관광지 정보를 찾을 수 없습니다",
+      };
+    }
+
+    // 이미지 URL 우선순위: firstimage -> firstimage2
+    const imageUrl =
+      detail.firstimage || detail.firstimage2 || undefined;
+
+    // 개요를 100자 이내로 제한
+    const description = detail.overview
+      ? detail.overview.slice(0, 100).replace(/\n/g, " ") + "..."
+      : `${detail.title} - 한국의 아름다운 관광지를 탐험하세요`;
+
+    // 현재 페이지 URL 생성
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const pageUrl = `${baseUrl}/places/${contentId}`;
+
+    console.group("📊 Open Graph 메타태그 생성");
+    console.log("제목:", detail.title);
+    console.log("설명:", description);
+    console.log("이미지:", imageUrl);
+    console.log("URL:", pageUrl);
+    console.groupEnd();
+
+    return {
+      title: detail.title,
+      description,
+      openGraph: {
+        title: detail.title,
+        description,
+        url: pageUrl,
+        siteName: "My Trip",
+        images: imageUrl
+          ? [
+              {
+                url: imageUrl,
+                width: 1200,
+                height: 630,
+                alt: detail.title,
+              },
+            ]
+          : [],
+        type: "website",
+        locale: "ko_KR",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: detail.title,
+        description,
+        images: imageUrl ? [imageUrl] : [],
+      },
+    };
+  } catch (error) {
+    console.error("❌ 메타데이터 생성 실패:", error);
+    return {
+      title: "관광지 상세 정보",
+    };
+  }
 }
 
 /**
@@ -233,16 +311,24 @@ export default async function PlaceDetailPage({
     console.log("🌐 최종 홈페이지 유효성:", detail.homepage && detail.homepage.trim() !== "");
     console.groupEnd();
 
+    // 현재 페이지 URL 생성 (공유 버튼용)
+    const headersList = await headers();
+    const host = headersList.get("host") || "localhost:3000";
+    const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${host}`;
+    const pageUrl = `${baseUrl}/places/${contentId}`;
+
     return (
       <div className="container mx-auto max-w-4xl px-4 py-8">
-        {/* 뒤로가기 버튼 */}
-        <section className="mb-6">
+        {/* 뒤로가기 버튼 및 공유 버튼 */}
+        <section className="mb-6 flex items-center justify-between">
           <Link href="/">
             <Button variant="ghost" size="sm" className="gap-2">
               <ArrowLeft className="h-4 w-4" />
               <span>뒤로가기</span>
             </Button>
           </Link>
+          <ShareButton url={pageUrl} title={detail.title} />
         </section>
 
         {/* 기본 정보 섹션 */}
