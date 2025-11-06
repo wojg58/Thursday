@@ -19,7 +19,7 @@ import {
   getAreaBasedList,
   searchKeyword,
 } from "@/lib/api/tour-api";
-import { TourList } from "@/components/tour-list";
+import { TourListInfinite } from "@/components/tour-list-infinite";
 import { TourFilters } from "@/components/tour-filters";
 import { TourSearch } from "@/components/tour-search";
 import { ErrorMessage } from "@/components/ui/error-message";
@@ -207,9 +207,17 @@ export default async function Home({ searchParams }: HomeProps) {
           <TourFilters areas={areas} />
         </section>
 
-        {/* 관광지 목록 영역 */}
+        {/* 관광지 목록 영역 (무한 스크롤) */}
         <section>
-          <TourList tours={tours} searchKeyword={keyword || undefined} />
+          <TourListInfinite
+            initialTours={tours}
+            totalCount={totalCount}
+            keyword={keyword || undefined}
+            areaCode={areaCode}
+            subAreaCode={subAreaCode}
+            contentTypeIds={contentTypeIds}
+            sortBy={sortBy}
+          />
         </section>
       </div>
     );
