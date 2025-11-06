@@ -35,6 +35,7 @@ import { DetailInfo } from "@/components/tour-detail/detail-info";
 import { DetailIntro } from "@/components/tour-detail/detail-intro";
 import { DetailGallery } from "@/components/tour-detail/detail-gallery";
 import { ShareButton } from "@/components/tour-detail/share-button";
+import { BookmarkButton } from "@/components/bookmarks/bookmark-button";
 import { ErrorMessage } from "@/components/ui/error-message";
 import type { TourImage } from "@/lib/types/tour";
 import type { Metadata } from "next";
@@ -337,7 +338,7 @@ export default async function PlaceDetailPage({
 
     return (
       <div className="container mx-auto max-w-4xl px-4 py-8">
-        {/* 뒤로가기 버튼 및 공유 버튼 */}
+        {/* 뒤로가기 버튼 및 액션 버튼들 */}
         <section className="mb-6 flex items-center justify-between">
           <Link href="/">
             <Button variant="ghost" size="sm" className="gap-2">
@@ -345,7 +346,10 @@ export default async function PlaceDetailPage({
               <span>뒤로가기</span>
             </Button>
           </Link>
-          <ShareButton url={pageUrl} title={detail.title} />
+          <div className="flex items-center gap-2">
+            <BookmarkButton contentId={detail.contentid} />
+            <ShareButton url={pageUrl} title={detail.title} />
+          </div>
         </section>
 
         {/* 기본 정보 섹션 */}

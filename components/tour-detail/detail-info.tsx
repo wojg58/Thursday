@@ -419,7 +419,7 @@ export function DetailInfo({ detail, className }: DetailInfoProps) {
           )}
 
           {/* 홈페이지 */}
-          {homepageUrl ? (
+          {homepageUrl && (
             <div className="space-y-2">
               <div className="flex items-start gap-2">
                 <Globe className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
@@ -465,31 +465,6 @@ export function DetailInfo({ detail, className }: DetailInfoProps) {
                 </Button>
               </div>
             </div>
-          ) : (
-            // 개발 환경에서만 홈페이지 없음 디버그 정보 표시
-            isDevelopment && (
-              <div className="space-y-2">
-                <div className="flex items-start gap-2">
-                  <Globe className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-muted-foreground mb-1">
-                      홈페이지
-                    </p>
-                    <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md p-3">
-                      <p className="text-xs text-yellow-700 dark:text-yellow-300">
-                        <strong>디버그:</strong> 홈페이지 URL이 없습니다.
-                        <br />
-                        <strong>원본 값:</strong> {detail.homepage || "없음"}
-                        <br />
-                        <strong>정규화 결과:</strong> {homepageUrl || "null"}
-                        <br />
-                        <strong>터미널 로그:</strong> "🌐 최종 홈페이지" 확인
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )
           )}
         </div>
       </section>

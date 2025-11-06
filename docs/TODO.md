@@ -156,21 +156,21 @@
 
 ### 4.2 북마크 기능 구현
 
-- [ ] `components/bookmarks/bookmark-button.tsx` - 북마크 버튼 컴포넌트
-- [ ] 상세페이지에 북마크 버튼 추가
-- [ ] Supabase DB 연동
-- [ ] 인증된 사용자 확인
-- [ ] 로그인하지 않은 경우 localStorage 임시 저장
+- [x] `components/bookmarks/bookmark-button.tsx` - 북마크 버튼 컴포넌트
+- [x] 상세페이지에 북마크 버튼 추가
+- [x] Supabase DB 연동
+- [x] 인증된 사용자 확인
+- [x] 로그인하지 않은 경우 localStorage 임시 저장
 - [ ] 상세페이지에서 북마크 동작 확인
 
 ### 4.3 북마크 목록 페이지
 
-- [ ] `app/bookmarks/page.tsx` - 북마크 목록 페이지 생성
-- [ ] `components/bookmarks/bookmark-list.tsx` - 북마크 목록 컴포넌트
-- [ ] 북마크한 관광지 목록 표시
-- [ ] 정렬 옵션 (최신순, 이름순, 지역별)
-- [ ] 일괄 삭제 기능
-- [ ] 페이지 확인
+- [x] `app/bookmarks/page.tsx` - 북마크 목록 페이지 생성
+- [x] `components/bookmarks/bookmark-list.tsx` - 북마크 목록 컴포넌트
+- [x] 북마크한 관광지 목록 표시
+- [x] 정렬 옵션 (최신순, 이름순, 지역별)
+- [x] 일괄 삭제 기능
+- [x] 페이지 확인
 
 ---
 
