@@ -66,10 +66,10 @@
 
 ### 2.2 관광지 목록 기능 (MVP 2.1)
 
-- [ ] `components/tour-card.tsx` - 관광지 카드 컴포넌트 (기본 정보만)
-- [ ] `components/tour-list.tsx` - 목록 표시 컴포넌트 (하드코딩 데이터로 테스트)
-- [ ] API 연동하여 실제 데이터 표시
-- [ ] 페이지 확인 및 스타일링 조정
+- [x] `components/tour-card.tsx` - 관광지 카드 컴포넌트 (기본 정보만)
+- [x] `components/tour-list.tsx` - 목록 표시 컴포넌트 (하드코딩 데이터로 테스트)
+- [x] API 연동하여 실제 데이터 표시
+- [x] 페이지 확인 및 스타일링 조정
 
 ### 2.3 필터 기능 추가
 
