@@ -41,7 +41,7 @@ interface TourListInfiniteProps {
    */
   keyword?: string;
   /**
-   * 지역코드
+   * 지역코드 (키워드 검색 시 빈 문자열이면 전체 검색)
    */
   areaCode: string;
   /**
@@ -158,7 +158,6 @@ export function TourListInfinite({
 
     try {
       const nextPage = currentPage + 1;
-      const searchAreaCode = subAreaCode || areaCode;
       const contentTypeId =
         contentTypeIds.length > 0
           ? (contentTypeIds[0] as ContentTypeId)
@@ -171,7 +170,11 @@ export function TourListInfinite({
       };
 
       if (keyword) {
-        // 검색 모드
+        // 검색 모드: 키워드 검색 시 areaCode가 빈 문자열이면 전체 검색
+        const searchAreaCode = areaCode && areaCode !== "" 
+          ? (subAreaCode || areaCode)
+          : undefined; // 전체 검색
+        
         result = await loadMoreSearchResults(
           keyword,
           searchAreaCode,
@@ -181,6 +184,7 @@ export function TourListInfinite({
         );
       } else {
         // 지역 기반 모드
+        const searchAreaCode = subAreaCode || areaCode;
         result = await loadMoreAreaBasedTours(
           searchAreaCode,
           contentTypeId,

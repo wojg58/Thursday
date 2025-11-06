@@ -112,12 +112,22 @@ export default async function Home({ searchParams }: HomeProps) {
       const contentTypeId =
         contentTypeIds.length > 0 ? contentTypeIds[0] : undefined;
 
-      // 시/군/구가 선택된 경우 subAreaCode 사용, 아니면 areaCode 사용
-      const searchAreaCode = subAreaCode || areaCode;
+      // 키워드 검색 시: 사용자가 명시적으로 지역을 선택한 경우에만 areaCode 전달
+      // (지역을 선택하지 않으면 전체 검색)
+      const searchAreaCode =
+        params.areaCode && params.areaCode !== "all"
+          ? subAreaCode || params.areaCode
+          : undefined; // 전체 검색
+
+      console.log("검색 파라미터:", {
+        keyword,
+        searchAreaCode: searchAreaCode || "전체",
+        contentTypeId,
+      });
 
       const result = await searchKeyword(
         keyword,
-        searchAreaCode,
+        searchAreaCode, // undefined면 전체 검색
         contentTypeId as any,
         1,
         20,
@@ -213,7 +223,13 @@ export default async function Home({ searchParams }: HomeProps) {
             initialTours={tours}
             totalCount={totalCount}
             keyword={keyword || undefined}
-            areaCode={areaCode}
+            areaCode={
+              keyword
+                ? params.areaCode && params.areaCode !== "all"
+                  ? areaCode
+                  : ""
+                : areaCode
+            }
             subAreaCode={subAreaCode}
             contentTypeIds={contentTypeIds}
             sortBy={sortBy}

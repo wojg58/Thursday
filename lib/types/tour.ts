@@ -56,7 +56,19 @@ export interface TourIntro {
   contentid: string;
   contenttypeid: string;
   // 공통 필드
-  infocenter?: string; // 문의처
+  infocenter?: string; // 문의처 (관광지 12)
+  infocenterculture?: string; // 문의처 (문화시설 14)
+  infocenterleports?: string; // 문의처 (레포츠 28)
+  infocenterlodging?: string; // 문의처 (숙박 32)
+  infocentershopping?: string; // 문의처 (쇼핑 38)
+  infocenterfood?: string; // 문의처 (음식점 39)
+  // 홈페이지 (타입별로 필드명이 다를 수 있음)
+  homepage?: string; // 홈페이지 (관광지 12)
+  homepageculture?: string; // 홈페이지 (문화시설 14)
+  homepageleports?: string; // 홈페이지 (레포츠 28)
+  homepagelodging?: string; // 홈페이지 (숙박 32)
+  homepageshopping?: string; // 홈페이지 (쇼핑 38)
+  homepagefood?: string; // 홈페이지 (음식점 39)
   parking?: string; // 주차 가능
   chkpet?: string; // 반려동물 동반
   // 관광지(12), 문화시설(14) 등
