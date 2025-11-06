@@ -26,10 +26,17 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Button } from "@/components/ui/button";
-import { getDetailCommon, getDetailIntro } from "@/lib/api/tour-api";
+import {
+  getDetailCommon,
+  getDetailIntro,
+  getDetailImage,
+} from "@/lib/api/tour-api";
 import { DetailInfo } from "@/components/tour-detail/detail-info";
+import { DetailIntro } from "@/components/tour-detail/detail-intro";
+import { DetailGallery } from "@/components/tour-detail/detail-gallery";
 import { ShareButton } from "@/components/tour-detail/share-button";
 import { ErrorMessage } from "@/components/ui/error-message";
+import type { TourImage } from "@/lib/types/tour";
 import type { Metadata } from "next";
 
 interface PlaceDetailPageProps {
@@ -311,6 +318,16 @@ export default async function PlaceDetailPage({
     console.log("🌐 최종 홈페이지 유효성:", detail.homepage && detail.homepage.trim() !== "");
     console.groupEnd();
 
+    // detailImage2 API 호출 (이미지 목록)
+    let images: TourImage[] = [];
+    try {
+      images = await getDetailImage(detail.contentid);
+      console.log("✅ 이미지 목록 조회 완료");
+      console.log("📸 이미지 개수:", images.length);
+    } catch (error) {
+      console.warn("⚠️ 이미지 목록 조회 실패 (선택 사항):", error);
+    }
+
     // 현재 페이지 URL 생성 (공유 버튼용)
     const headersList = await headers();
     const host = headersList.get("host") || "localhost:3000";
@@ -333,6 +350,12 @@ export default async function PlaceDetailPage({
 
         {/* 기본 정보 섹션 */}
         <DetailInfo detail={detail} />
+
+        {/* 이미지 갤러리 섹션 */}
+        <DetailGallery images={images} title={detail.title} />
+
+        {/* 운영 정보 섹션 */}
+        <DetailIntro intro={intro} contentTypeId={detail.contenttypeid} />
 
         {/* 지도 섹션 (3.3에서 구현 예정) */}
         <section className="mb-8 mt-8">

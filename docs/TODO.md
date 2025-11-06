@@ -138,11 +138,11 @@
 
 ### 3.5 추가 정보 섹션 (향후 구현)
 
-- [ ] `components/tour-detail/detail-intro.tsx` - 운영 정보 컴포넌트
-- [ ] `detailIntro2` API 연동
-- [ ] `components/tour-detail/detail-gallery.tsx` - 이미지 갤러리 컴포넌트
-- [ ] `detailImage2` API 연동
-- [ ] 페이지 확인
+- [x] `components/tour-detail/detail-intro.tsx` - 운영 정보 컴포넌트
+- [x] `detailIntro2` API 연동
+- [x] `components/tour-detail/detail-gallery.tsx` - 이미지 갤러리 컴포넌트
+- [x] `detailImage2` API 연동
+- [x] 페이지 확인
 
 ---
 
