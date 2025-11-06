@@ -113,6 +113,11 @@
 }
 
 @layer base {
+  html {
+    /* 기본 폰트 크기를 3포인트(약 4px) 증가: 16px -> 20px (125%) */
+    font-size: 125%;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }

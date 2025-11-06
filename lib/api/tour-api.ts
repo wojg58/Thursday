@@ -118,7 +118,56 @@ export async function getAreaCode(
   });
 
   const items = response.response.body.items.item;
-  return Array.isArray(items) ? items : items ? [items] : [];
+  const areaList = Array.isArray(items) ? items : items ? [items] : [];
+
+  // API가 모든 시/도를 반환하지 않을 수 있으므로, 누락된 지역을 추가
+  // 한국관광공사 API의 표준 지역코드 구조
+  const allAreas: AreaCode[] = [
+    { code: '1', name: '서울' },
+    { code: '2', name: '인천' },
+    { code: '3', name: '대전' },
+    { code: '4', name: '대구' },
+    { code: '5', name: '광주' },
+    { code: '6', name: '부산' },
+    { code: '7', name: '울산' },
+    { code: '8', name: '세종' },
+    { code: '31', name: '경기도' },
+    { code: '32', name: '강원도' },
+    { code: '33', name: '충청북도' },
+    { code: '34', name: '충청남도' },
+    { code: '35', name: '경상북도' },
+    { code: '36', name: '경상남도' },
+    { code: '37', name: '전라북도' },
+    { code: '38', name: '전라남도' },
+    { code: '39', name: '제주도' },
+  ];
+
+  // API에서 반환된 지역과 하드코딩된 지역을 병합
+  // 하드코딩된 목록을 우선 사용하여 일관된 지역명 표시
+  if (areaList.length > 0) {
+    // API 응답과 하드코딩된 목록을 병합 (중복 제거)
+    const areaMap = new Map<string, string>();
+    
+    // API 응답을 먼저 추가
+    areaList.forEach((area) => {
+      areaMap.set(area.code, area.name);
+    });
+    
+    // 하드코딩된 목록으로 덮어쓰기 (하드코딩된 값이 우선)
+    // 이렇게 하면 세종, 강원도, 제주도 같은 간단한 이름이 유지됨
+    allAreas.forEach((area) => {
+      areaMap.set(area.code, area.name);
+    });
+    
+    // 코드 순서대로 정렬하여 반환
+    return allAreas.map((area) => ({
+      code: area.code,
+      name: areaMap.get(area.code) || area.name,
+    }));
+  }
+
+  // API 응답이 없으면 하드코딩된 목록 반환
+  return allAreas;
 }
 
 /**
