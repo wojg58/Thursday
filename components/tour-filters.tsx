@@ -15,22 +15,22 @@
  * @see {@link /docs/reference/design.md} - 디자인 레이아웃
  */
 
-'use client';
+"use client";
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { MapPin, Tag, ArrowUpDown, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useRouter, useSearchParams } from "next/navigation";
+import { MapPin, Tag, ArrowUpDown, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import type { AreaCode } from '@/lib/types/tour';
-import { CONTENT_TYPE } from '@/lib/types/tour';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import type { AreaCode } from "@/lib/types/tour";
+import { CONTENT_TYPE } from "@/lib/types/tour";
+import { cn } from "@/lib/utils";
 
 interface TourFiltersProps {
   /**
@@ -44,17 +44,17 @@ interface TourFiltersProps {
  */
 function getContentTypeName(contentTypeId: string): string {
   const typeMap: Record<string, string> = {
-    [CONTENT_TYPE.TOURIST_SPOT]: '관광지',
-    [CONTENT_TYPE.CULTURAL_FACILITY]: '문화시설',
-    [CONTENT_TYPE.FESTIVAL]: '축제/행사',
-    [CONTENT_TYPE.TRAVEL_COURSE]: '여행코스',
-    [CONTENT_TYPE.LEISURE_SPORTS]: '레포츠',
-    [CONTENT_TYPE.ACCOMMODATION]: '숙박',
-    [CONTENT_TYPE.SHOPPING]: '쇼핑',
-    [CONTENT_TYPE.RESTAURANT]: '음식점',
+    [CONTENT_TYPE.TOURIST_SPOT]: "관광지",
+    [CONTENT_TYPE.CULTURAL_FACILITY]: "문화시설",
+    [CONTENT_TYPE.FESTIVAL]: "축제/행사",
+    [CONTENT_TYPE.TRAVEL_COURSE]: "여행코스",
+    [CONTENT_TYPE.LEISURE_SPORTS]: "레포츠",
+    [CONTENT_TYPE.ACCOMMODATION]: "숙박",
+    [CONTENT_TYPE.SHOPPING]: "쇼핑",
+    [CONTENT_TYPE.RESTAURANT]: "음식점",
   };
 
-  return typeMap[contentTypeId] || '기타';
+  return typeMap[contentTypeId] || "기타";
 }
 
 /**
@@ -70,9 +70,9 @@ export function TourFilters({ areas }: TourFiltersProps) {
   const searchParams = useSearchParams();
 
   // URL에서 현재 필터 값 읽기
-  const selectedArea = searchParams.get('areaCode') || '';
-  const selectedTypes = searchParams.get('contentTypeId')?.split(',') || [];
-  const sortBy = (searchParams.get('sort') as 'latest' | 'name') || 'latest';
+  const selectedArea = searchParams.get("areaCode") || "";
+  const selectedTypes = searchParams.get("contentTypeId")?.split(",") || [];
+  const sortBy = (searchParams.get("sort") as "latest" | "name") || "latest";
 
   /**
    * URL 쿼리 파라미터 업데이트
@@ -80,14 +80,14 @@ export function TourFilters({ areas }: TourFiltersProps) {
   const updateParams = (key: string, value: string | null) => {
     const params = new URLSearchParams(searchParams.toString());
 
-    if (value === null || value === '') {
+    if (value === null || value === "") {
       params.delete(key);
     } else {
       params.set(key, value);
     }
 
     // 페이지 번호 초기화
-    params.delete('page');
+    params.delete("page");
 
     router.push(`/?${params.toString()}`, { scroll: false });
   };
@@ -96,7 +96,7 @@ export function TourFilters({ areas }: TourFiltersProps) {
    * 지역 변경 핸들러
    */
   const handleAreaChange = (areaCode: string) => {
-    updateParams('areaCode', areaCode === 'all' ? null : areaCode);
+    updateParams("areaCode", areaCode === "all" ? null : areaCode);
   };
 
   /**
@@ -107,7 +107,10 @@ export function TourFilters({ areas }: TourFiltersProps) {
       ? selectedTypes.filter((id) => id !== typeId)
       : [...selectedTypes, typeId];
 
-    updateParams('contentTypeId', newTypes.length > 0 ? newTypes.join(',') : null);
+    updateParams(
+      "contentTypeId",
+      newTypes.length > 0 ? newTypes.join(",") : null,
+    );
   };
 
   /**
@@ -115,21 +118,24 @@ export function TourFilters({ areas }: TourFiltersProps) {
    */
   const handleTypeRemove = (typeId: string) => {
     const newTypes = selectedTypes.filter((id) => id !== typeId);
-    updateParams('contentTypeId', newTypes.length > 0 ? newTypes.join(',') : null);
+    updateParams(
+      "contentTypeId",
+      newTypes.length > 0 ? newTypes.join(",") : null,
+    );
   };
 
   /**
    * 정렬 변경 핸들러
    */
-  const handleSortChange = (sort: 'latest' | 'name') => {
-    updateParams('sort', sort);
+  const handleSortChange = (sort: "latest" | "name") => {
+    updateParams("sort", sort);
   };
 
   /**
    * 모든 필터 초기화
    */
   const handleReset = () => {
-    router.push('/', { scroll: false });
+    router.push("/", { scroll: false });
   };
 
   return (
@@ -142,7 +148,10 @@ export function TourFilters({ areas }: TourFiltersProps) {
             {/* 지역 선택 */}
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
-              <Select value={selectedArea || 'all'} onValueChange={handleAreaChange}>
+              <Select
+                value={selectedArea || "all"}
+                onValueChange={handleAreaChange}
+              >
                 <SelectTrigger className="w-[140px] sm:w-[160px]">
                   <SelectValue placeholder="지역 선택" />
                 </SelectTrigger>
@@ -193,7 +202,7 @@ export function TourFilters({ areas }: TourFiltersProps) {
                 return (
                   <Button
                     key={type.id}
-                    variant={isSelected ? 'default' : 'outline'}
+                    variant={isSelected ? "default" : "outline"}
                     size="sm"
                     onClick={() => handleTypeToggle(type.id)}
                     className="h-8 shrink-0"
@@ -213,9 +222,10 @@ export function TourFilters({ areas }: TourFiltersProps) {
             {selectedArea && (
               <Badge variant="secondary" className="gap-1">
                 <MapPin className="h-3 w-3" />
-                {areas.find((a) => a.code === selectedArea)?.name || selectedArea}
+                {areas.find((a) => a.code === selectedArea)?.name ||
+                  selectedArea}
                 <button
-                  onClick={() => handleAreaChange('all')}
+                  onClick={() => handleAreaChange("all")}
                   className="ml-1 hover:bg-destructive/20 rounded-full p-0.5"
                   aria-label="지역 필터 제거"
                 >
@@ -242,4 +252,3 @@ export function TourFilters({ areas }: TourFiltersProps) {
     </div>
   );
 }
-

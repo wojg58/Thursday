@@ -32,19 +32,27 @@ interface TourListProps {
    * 추가 클래스명
    */
   className?: string;
+  /**
+   * 검색 키워드 (검색 모드일 때)
+   */
+  searchKeyword?: string;
 }
 
 /**
  * 빈 목록 메시지 컴포넌트
  */
-function EmptyList() {
+function EmptyList({ searchKeyword }: { searchKeyword?: string }) {
   return (
     <div className="text-center py-12">
       <p className="text-lg font-semibold text-muted-foreground mb-2">
-        관광지 정보가 없습니다
+        {searchKeyword
+          ? `"${searchKeyword}"에 대한 검색 결과가 없습니다`
+          : '관광지 정보가 없습니다'}
       </p>
       <p className="text-sm text-muted-foreground">
-        다른 조건으로 검색해보세요.
+        {searchKeyword
+          ? '다른 키워드로 검색하거나 필터를 조정해보세요.'
+          : '다른 조건으로 검색해보세요.'}
       </p>
     </div>
   );
@@ -54,6 +62,7 @@ export function TourList({
   tours,
   isLoading = false,
   className,
+  searchKeyword,
 }: TourListProps) {
   // 로딩 중일 때 스켈레톤 UI 표시
   if (isLoading) {
@@ -62,7 +71,7 @@ export function TourList({
 
   // 빈 목록 처리
   if (tours.length === 0) {
-    return <EmptyList />;
+    return <EmptyList searchKeyword={searchKeyword} />;
   }
 
   return (

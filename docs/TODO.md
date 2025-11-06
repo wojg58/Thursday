@@ -80,11 +80,11 @@
 
 ### 2.4 검색 기능 추가 (MVP 2.3)
 
-- [ ] `components/tour-search.tsx` - 검색창 UI
-- [ ] 검색 API 연동 (`searchKeyword2`)
-- [ ] 검색 결과 표시
-- [ ] 검색 + 필터 조합 동작
-- [ ] 페이지 확인 및 UX 개선
+- [x] `components/tour-search.tsx` - 검색창 UI
+- [x] 검색 API 연동 (`searchKeyword2`)
+- [x] 검색 결과 표시
+- [x] 검색 + 필터 조합 동작
+- [x] 페이지 확인 및 UX 개선
 
 ### 2.5 지도 연동 (MVP 2.2) - ⏰ 내일 진행
 
