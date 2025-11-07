@@ -121,25 +121,25 @@ export async function isBookmarked(
   contentId: string
 ): Promise<boolean> {
   try {
+    // .maybeSingle()을 사용하여 데이터가 없어도 에러가 발생하지 않도록 함
     const { data, error } = await supabase
       .from('bookmarks')
       .select('id')
       .eq('user_id', userId)
       .eq('content_id', contentId)
-      .single();
+      .maybeSingle();
 
     if (error) {
-      // 데이터가 없는 경우 (북마크되지 않음)
-      if (error.code === 'PGRST116') {
-        return false;
-      }
-      throw error;
+      // 406 에러나 다른 에러가 발생하면 false 반환 (북마크되지 않은 것으로 간주)
+      console.warn('⚠️ 북마크 여부 확인 중 에러 (무시):', error);
+      return false;
     }
 
     return !!data;
   } catch (error) {
     console.error('❌ 북마크 여부 확인 중 오류 발생:', error);
-    throw error;
+    // 에러 발생 시 false 반환 (북마크되지 않은 것으로 간주)
+    return false;
   }
 }
 

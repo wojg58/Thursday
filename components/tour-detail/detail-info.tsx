@@ -343,7 +343,7 @@ export function DetailInfo({ detail, className }: DetailInfoProps) {
                 <p><strong>전화번호 (tel):</strong> {detail.tel || "없음"}</p>
                 <p><strong>전화번호 타입:</strong> {typeof detail.tel}</p>
                 <p>
-                  <strong>해결 방법:</strong> 터미널 로그에서 "📋 detailCommon2 API 응답"과 "📋 detailIntro2 API 응답"을 확인하세요.
+                  <strong>해결 방법:</strong> 터미널 로그에서 &quot;📋 detailCommon2 API 응답&quot;과 &quot;📋 detailIntro2 API 응답&quot;을 확인하세요.
                 </p>
               </div>
             </div>

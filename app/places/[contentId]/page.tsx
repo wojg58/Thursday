@@ -34,6 +34,7 @@ import {
 import { DetailInfo } from "@/components/tour-detail/detail-info";
 import { DetailIntro } from "@/components/tour-detail/detail-intro";
 import { DetailGallery } from "@/components/tour-detail/detail-gallery";
+import { DetailMapWrapper } from "@/components/tour-detail/detail-map-wrapper";
 import { ShareButton } from "@/components/tour-detail/share-button";
 import { BookmarkButton } from "@/components/bookmarks/bookmark-button";
 import { ErrorMessage } from "@/components/ui/error-message";
@@ -337,7 +338,7 @@ export default async function PlaceDetailPage({
     const pageUrl = `${baseUrl}/places/${contentId}`;
 
     return (
-      <div className="container mx-auto max-w-4xl px-4 py-8">
+      <div className="container mx-auto px-4 py-8">
         {/* 뒤로가기 버튼 및 액션 버튼들 */}
         <section className="mb-6 flex items-center justify-between">
           <Link href="/">
@@ -352,22 +353,34 @@ export default async function PlaceDetailPage({
           </div>
         </section>
 
-        {/* 기본 정보 섹션 */}
-        <DetailInfo detail={detail} />
+        {/* 데스크톱: 분할 레이아웃 (왼쪽: 정보, 오른쪽: 지도) */}
+        <div className="lg:grid lg:grid-cols-2 lg:gap-6 lg:items-start">
+          {/* 왼쪽: 관광지 정보 */}
+          <div className="space-y-8 max-w-4xl lg:max-w-none">
+            {/* 기본 정보 섹션 */}
+            <DetailInfo detail={detail} />
 
-        {/* 이미지 갤러리 섹션 */}
-        <DetailGallery images={images} title={detail.title} />
+            {/* 이미지 갤러리 섹션 */}
+            <DetailGallery images={images} title={detail.title} />
 
-        {/* 운영 정보 섹션 */}
-        <DetailIntro intro={intro} contentTypeId={detail.contenttypeid} />
+            {/* 운영 정보 섹션 */}
+            <DetailIntro intro={intro} contentTypeId={detail.contenttypeid} />
+          </div>
 
-        {/* 지도 섹션 (3.3에서 구현 예정) */}
-        <section className="mb-8 mt-8">
+          {/* 오른쪽: 지도 (데스크톱만 표시) */}
+          <div className="hidden lg:block lg:sticky lg:top-4">
+            <div className="rounded-lg border bg-card p-6">
+              <h2 className="text-2xl font-semibold mb-4">🗺️ 위치 정보</h2>
+              <DetailMapWrapper detail={detail} />
+            </div>
+          </div>
+        </div>
+
+        {/* 모바일: 지도 섹션 (정보 아래에 표시) */}
+        <section className="lg:hidden mt-8">
           <div className="rounded-lg border bg-card p-6">
             <h2 className="text-2xl font-semibold mb-4">🗺️ 위치 정보</h2>
-            <p className="text-muted-foreground">
-              지도 섹션은 Phase 3.3에서 구현 예정입니다.
-            </p>
+            <DetailMapWrapper detail={detail} />
           </div>
         </section>
       </div>

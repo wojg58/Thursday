@@ -63,6 +63,7 @@ function TourSearchInner({
     setIsMounted(true);
     const currentKeyword = searchParams.get('keyword') || '';
     setKeyword(currentKeyword);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // URL 변경 시 검색 키워드 업데이트

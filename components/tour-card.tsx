@@ -29,6 +29,10 @@ interface TourCardProps {
    * 추가 클래스명
    */
   className?: string;
+  /**
+   * 카드 클릭 시 호출되는 콜백 (지도 연동용, Link 기본 동작은 유지)
+   */
+  onClick?: (tour: TourItem) => void;
 }
 
 /**
@@ -105,7 +109,7 @@ function isValidImageUrl(url: string | undefined): boolean {
   }
 }
 
-export function TourCard({ tour, className }: TourCardProps) {
+export function TourCard({ tour, className, onClick }: TourCardProps) {
   // 이미지 URL 우선순위: firstimage -> firstimage2 -> 기본 이미지
   const imageUrl = isValidImageUrl(tour.firstimage)
     ? tour.firstimage!
@@ -126,9 +130,16 @@ export function TourCard({ tour, className }: TourCardProps) {
   const contentTypeName = getContentTypeName(tour.contenttypeid);
   const badgeColor = getContentTypeColor(tour.contenttypeid);
 
+  const handleClick = () => {
+    if (onClick) {
+      onClick(tour);
+    }
+  };
+
   return (
     <Link
       href={`/places/${tour.contentid}`}
+      onClick={handleClick}
       className={cn(
         "group block rounded-lg border bg-card overflow-hidden",
         "hover:shadow-lg transition-all duration-200",

@@ -63,7 +63,7 @@ async function fetchTourApi<T>(
     ...COMMON_PARAMS,
     ...Object.fromEntries(
       Object.entries(params).filter(
-        ([_, value]) => value !== undefined && value !== "",
+        ([, value]) => value !== undefined && value !== "",
       ) as [string, string][],
     ),
   });
@@ -168,6 +168,22 @@ export async function getAreaCode(areaCode?: string): Promise<AreaCode[]> {
 
   // API 응답이 없으면 하드코딩된 목록 반환
   return allAreas;
+}
+
+/**
+ * 시/군/구 코드 조회 (areaCode2 - 하위 지역)
+ * @param areaCode 상위 지역코드 (필수)
+ * @returns 시/군/구 코드 목록
+ */
+export async function getSubAreaCode(areaCode: string): Promise<AreaCode[]> {
+  const response = await fetchTourApi<AreaCode>("/areaCode2", {
+    areaCode,
+  });
+
+  const items = response.response.body.items.item;
+  const areaList = Array.isArray(items) ? items : items ? [items] : [];
+
+  return areaList;
 }
 
 /**

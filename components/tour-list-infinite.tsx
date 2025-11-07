@@ -20,7 +20,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import type { TourItem, ContentTypeId } from "@/lib/types/tour";
 import { TourCard } from "./tour-card";
-import { GridSkeleton, TourCardSkeleton } from "./ui/skeleton";
+import { TourCardSkeleton } from "./ui/skeleton";
 import { cn } from "@/lib/utils";
 import {
   loadMoreAreaBasedTours,
@@ -60,6 +60,14 @@ interface TourListInfiniteProps {
    * 추가 클래스명
    */
   className?: string;
+  /**
+   * 관광지 선택 시 호출되는 콜백 (지도 연동용)
+   */
+  onTourSelect?: (tour: TourItem) => void;
+  /**
+   * 관광지 목록 업데이트 시 호출되는 콜백 (무한 스크롤로 추가된 항목을 지도에 반영)
+   */
+  onToursUpdate?: (tours: TourItem[]) => void;
 }
 
 /**
@@ -86,7 +94,7 @@ function EmptyList({ searchKeyword }: { searchKeyword?: string }) {
     <div className="text-center py-12">
       <p className="text-lg font-semibold text-muted-foreground mb-2">
         {searchKeyword
-          ? `"${searchKeyword}"에 대한 검색 결과가 없습니다`
+          ? `&quot;${searchKeyword}&quot;에 대한 검색 결과가 없습니다`
           : "관광지 정보가 없습니다"}
       </p>
       <p className="text-sm text-muted-foreground">
@@ -110,6 +118,8 @@ export function TourListInfinite({
   contentTypeIds,
   sortBy,
   className,
+  onTourSelect,
+  onToursUpdate,
 }: TourListInfiniteProps) {
   // 서버에서 이미 정렬된 데이터를 받으므로, 초기값은 그대로 사용
   // useState의 초기값은 첫 렌더링에만 사용되므로 서버 데이터를 그대로 사용 (hydration 오류 방지)
@@ -143,8 +153,13 @@ export function TourListInfinite({
       setCurrentPage(1);
       setHasMore(initialTours.length < totalCount);
       prevInitialToursRef.current = currentKey;
+      
+      // 지도에 업데이트된 목록 전달
+      if (onToursUpdate) {
+        onToursUpdate(initialTours);
+      }
     }
-  }, [initialTours, totalCount, sortBy]);
+  }, [initialTours, totalCount, sortBy, onToursUpdate]);
 
   /**
    * 추가 데이터 로드
@@ -208,13 +223,19 @@ export function TourListInfinite({
         newItems.sort(sortByLatest);
       }
 
-      setTours((prev) => [...prev, ...newItems]);
+      setTours((prev) => {
+        const updatedTours = [...prev, ...newItems];
+        console.log(
+          `✅ ${newItems.length}개 항목 추가 완료 (전체: ${updatedTours.length})`,
+        );
+        // 지도에 업데이트된 목록 전달
+        if (onToursUpdate) {
+          onToursUpdate(updatedTours);
+        }
+        return updatedTours;
+      });
       setCurrentPage(nextPage);
       setHasMore(result.hasMore && newItems.length > 0);
-
-      console.log(
-        `✅ ${newItems.length}개 항목 추가 완료 (전체: ${tours.length + newItems.length})`,
-      );
       console.groupEnd();
     } catch (error) {
       console.error("❌ 추가 데이터 로드 실패:", error);
@@ -275,7 +296,11 @@ export function TourListInfinite({
         )}
       >
         {tours.map((tour) => (
-          <TourCard key={tour.contentid} tour={tour} />
+          <TourCard
+            key={tour.contentid}
+            tour={tour}
+            onClick={onTourSelect}
+          />
         ))}
       </div>
 

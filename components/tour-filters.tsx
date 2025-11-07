@@ -30,7 +30,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import type { AreaCode } from "@/lib/types/tour";
 import { CONTENT_TYPE } from "@/lib/types/tour";
-import { cn } from "@/lib/utils";
 
 interface TourFiltersProps {
   /**
@@ -60,7 +59,7 @@ function getContentTypeName(contentTypeId: string): string {
 /**
  * 모든 관광 타입 목록
  */
-const ALL_CONTENT_TYPES = Object.entries(CONTENT_TYPE).map(([key, value]) => ({
+const ALL_CONTENT_TYPES = Object.entries(CONTENT_TYPE).map(([, value]) => ({
   id: value,
   name: getContentTypeName(value),
 }));

@@ -56,6 +56,35 @@ interface BookmarkListProps {
 type SortOption = "latest" | "name" | "region";
 
 /**
+ * 북마크 날짜 표시 컴포넌트
+ * 
+ * Hydration 에러를 방지하기 위해 클라이언트에서만 날짜를 포맷팅합니다.
+ * 서버에서는 빈 문자열을 렌더링하고, 클라이언트에서 마운트된 후 날짜를 표시합니다.
+ */
+function BookmarkDate({ dateString }: { dateString: string }) {
+  const [formattedDate, setFormattedDate] = useState<string>("");
+
+  useEffect(() => {
+    // 클라이언트에서만 날짜 포맷팅
+    const date = new Date(dateString);
+    const formatted = date.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    setFormattedDate(formatted);
+  }, [dateString]);
+
+  return (
+    <div className="absolute bottom-2 left-2 z-10">
+      <span className="px-2 py-1 text-xs rounded bg-background/80 backdrop-blur-sm border">
+        {formattedDate || "..."}
+      </span>
+    </div>
+  );
+}
+
+/**
  * TourDetail을 TourItem으로 변환
  * 북마크 목록에서 TourCard를 사용하기 위해 필요
  */
@@ -381,7 +410,7 @@ export function BookmarkList({ className }: BookmarkListProps) {
   if (error) {
     return (
       <div className={cn("space-y-6", className)}>
-        <ErrorMessage type="error" message={error} />
+        <ErrorMessage type="api" message={error} />
       </div>
     );
   }
@@ -533,15 +562,7 @@ export function BookmarkList({ className }: BookmarkListProps) {
 
                 {/* 북마크 날짜 */}
                 {bookmark && (
-                  <div className="absolute bottom-2 left-2 z-10">
-                    <span className="px-2 py-1 text-xs rounded bg-background/80 backdrop-blur-sm border">
-                      {new Date(bookmark.created_at).toLocaleDateString("ko-KR", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                      })}
-                    </span>
-                  </div>
+                  <BookmarkDate dateString={bookmark.created_at} />
                 )}
 
                 {/* 관광지 카드 */}

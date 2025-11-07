@@ -9,7 +9,7 @@
  * - 지역/타입 필터
  * - 키워드 검색
  * - 검색 + 필터 조합
- * - 지도 연동 (내일 구현 예정)
+ * - 지도 연동 (네이버 지도)
  *
  * @see {@link /docs/PRD.md} - 프로젝트 요구사항 문서
  */
@@ -202,7 +202,9 @@ export default async function Home({ searchParams }: HomeProps) {
         {keyword && (
           <section className="mb-4">
             <p className="text-sm text-muted-foreground">
-              <span className="font-semibold text-foreground">"{keyword}"</span>
+              <span className="font-semibold text-foreground">
+                &quot;{keyword}&quot;
+              </span>
               {totalCount > 0 ? (
                 <> 검색 결과 {totalCount}개</>
               ) : (
@@ -217,24 +219,24 @@ export default async function Home({ searchParams }: HomeProps) {
           <TourFilters areas={areas} />
         </section>
 
-        {/* 관광지 목록 영역 (무한 스크롤) */}
-        <section>
-          <TourListInfinite
-            initialTours={tours}
-            totalCount={totalCount}
-            keyword={keyword || undefined}
-            areaCode={
-              keyword
-                ? params.areaCode && params.areaCode !== "all"
-                  ? areaCode
-                  : ""
-                : areaCode
-            }
-            subAreaCode={subAreaCode}
-            contentTypeIds={contentTypeIds}
-            sortBy={sortBy}
-          />
-        </section>
+      {/* 관광지 목록 */}
+      <section>
+        <TourListInfinite
+          initialTours={tours}
+          totalCount={totalCount}
+          keyword={keyword || undefined}
+          areaCode={
+            keyword
+              ? params.areaCode && params.areaCode !== "all"
+                ? areaCode
+                : ""
+              : areaCode
+          }
+          subAreaCode={subAreaCode}
+          contentTypeIds={contentTypeIds}
+          sortBy={sortBy}
+        />
+      </section>
       </div>
     );
   } catch (err) {
